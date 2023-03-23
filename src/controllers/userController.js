@@ -142,10 +142,10 @@ export const finishGithubLogin = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-    // req.session.user = null;
-    // res.locals.loggedInUser = req.session.user;
-    // req.session.loggedIn = false;
-    req.sessions.destroy();
+    req.session.user = null;
+    res.locals.loggedInUser = req.session.user;
+    req.session.loggedIn = false;
+    // req.sessions.destroy();
     req.flash("info", "Bye Bye");
     return res.redirect("/");
 };

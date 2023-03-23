@@ -151,3 +151,21 @@ export const createComment = async (req, res) => {
     video.save();
     return res.status(201).json({ newCommentId: comment._id });
 };
+
+export const deleteComment = async (req, res) => {
+    const {
+        session: { user },
+        body: { videoId },
+        params: { id },
+    } = req;
+    const video = await Video.findById(videoId);
+    const commentUser = await User.findById(user._id);
+    
+    commentUser.comments.splice(commentUser.comments.indexOf(id), 1);
+    video.comments.splice(video.comments.indexOf(id), 1);
+    await video.save();
+    await commentUser.save();   
+    await Comment.findByIdAndDelete(id);
+    
+    return res.sendStatus(201);
+};

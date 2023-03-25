@@ -19,6 +19,7 @@ const addComment = (text, id) => {
     newComment.appendChild(span);
     newComment.appendChild(span2);
     videoComments.prepend(newComment);
+    span2.addEventListener("click", handleDeleteComment);
 };
 
 const handleSubmit = async (event) => {
@@ -42,10 +43,6 @@ const handleSubmit = async (event) => {
         addComment(text, newCommentId);
     }
 };
-
-if (form) {
-    form.addEventListener("submit", handleSubmit);
-}
 
 const deleteComment = (event) => {
     const comments = document.querySelector(".video__comments ul");
@@ -71,6 +68,10 @@ const handleDeleteComment = async (event) => {
         deleteComment(event);
     }
 };
+
+if (form) {
+    form.addEventListener("submit", handleSubmit);
+}
 
 if (deleteBtns) {
     deleteBtns.forEach((deleteBtn) => {

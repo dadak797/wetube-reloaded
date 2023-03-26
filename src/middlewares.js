@@ -13,20 +13,22 @@ const s3 = new S3Client({
 
 const isHeroku = process.env.NODE_ENV === "production";
 
-const s3ImageUploader = multerS3({
-    s3: s3,
-    bucket: "daktube/images",
-    // acl: "public-read"
-    Condition: {
-        StringEquals: {
-        "s3:x-amz-acl": ["public-read"],
-        },
-    }
-});
+// const s3ImageUploader = multerS3({
+//     s3: s3,
+//     bucket: "daktube/images",
+//     // acl: "public-read"
+//     Condition: {
+//         StringEquals: {
+//         "s3:x-amz-acl": ["public-read"],
+//         },
+//     }
+// });
 
-const s3VideoUploader = multerS3({
+// const s3VideoUploader = multerS3({
+const s3Uploader = multerS3({
     s3: s3,
-    bucket: "daktube/videos",
+    bucket: "daktube",
+    // bucket: "daktube/videos",
     // acl: "public-read"
     Condition: {
         StringEquals: {
@@ -67,7 +69,7 @@ export const avatarUpload = multer({
         fileSize: 3000000,
     },
     //storage: isHeroku ? s3ImageUploader : undefined
-    storage: s3ImageUploader
+    storage: s3Uploader
 });
 
 export const videoUpload = multer({
@@ -76,5 +78,5 @@ export const videoUpload = multer({
         fileSize: 10000000,
     },
     //storage: isHeroku ? s3VideoUploader : undefined
-    storage: s3VideoUploader
+    storage: s3Uploader
 });

@@ -1,4 +1,26 @@
 import multer from "multer";
+import multerS3 from "multer-s3";
+import { S3Client } from "@aws-sdk/client-s3";
+
+const s3 = new S3Client({
+    region: "ap-northeast-2",
+    credentials: {
+        apiVersion: "2023-03-26",
+        accessKeyId: process.env.AWS_ID,
+        secretAccessKey: process.env.AWS_SECRET
+    }
+});
+
+const multerUploader = multerS3({
+    s3: s3,
+    bucket: "daktube",
+    // acl: "public-read"
+    Condition: {
+        StringEquals: {
+        "s3:x-amz-acl": ["public-read"],
+        },
+    }
+});
 
 export const localsMiddleware = (req, res, next) => {
     res.locals.loggedIn = Boolean(req.session.loggedIn);
@@ -30,6 +52,7 @@ export const avatarUpload = multer({
     limits: {
         fileSize: 3000000,
     },
+    storage: multerUploader
 });
 
 export const videoUpload = multer({
@@ -37,4 +60,5 @@ export const videoUpload = multer({
     limits: {
         fileSize: 10000000,
     },
+    storage: multerUploader
 });

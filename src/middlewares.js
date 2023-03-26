@@ -16,23 +16,23 @@ const isHeroku = process.env.NODE_ENV === "production";
 const s3ImageUploader = multerS3({
     s3: s3,
     bucket: "daktube/images",
-    // acl: "public-read"
-    Condition: {
-        StringEquals: {
-        "s3:x-amz-acl": ["public-read"],
-        },
-    }
+    acl: "public-read"
+    // Condition: {
+    //     StringEquals: {
+    //     "s3:x-amz-acl": ["public-read"],
+    //     },
+    // }
 });
 
 const s3VideoUploader = multerS3({
     s3: s3,
     bucket: "daktube/videos",
-    // acl: "public-read"
-    Condition: {
-        StringEquals: {
-        "s3:x-amz-acl": ["public-read"],
-        },
-    }
+    acl: "public-read"
+    // Condition: {
+    //     StringEquals: {
+    //     "s3:x-amz-acl": ["public-read"],
+    //     },
+    // }
 });
 
 export const localsMiddleware = (req, res, next) => {
@@ -66,7 +66,8 @@ export const avatarUpload = multer({
     limits: {
         fileSize: 3000000,
     },
-    storage: isHeroku ? s3ImageUploader : undefined
+    //storage: isHeroku ? s3ImageUploader : undefined
+    storage: s3ImageUploader
 });
 
 export const videoUpload = multer({
@@ -74,5 +75,6 @@ export const videoUpload = multer({
     limits: {
         fileSize: 10000000,
     },
-    storage: isHeroku ? s3VideoUploader : undefined
+    //storage: isHeroku ? s3VideoUploader : undefined
+    storage: s3VideoUploader
 });
